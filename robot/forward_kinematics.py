@@ -1,7 +1,9 @@
-from robot.dh_model import DHModel
+from robot.dh_model import DHModel, load_dh_from_yaml
 
-def forward_kinematics(joint_angles, dh_model):
-    # Returns end-effector position and full transformation chain
-    transforms = dh_model.get_joint_transforms(joint_angles)
-    return transforms[-1]  # End-effector pose
-print("magdy")
+class ForwardKinematics:
+    def __init__(self, dh_config_path):
+        self.dh_params = load_dh_from_yaml(dh_config_path)
+        self.model = DHModel(self.dh_params)
+
+    def compute(self, joint_angles):
+        return self.model.get_joint_transforms(joint_angles)

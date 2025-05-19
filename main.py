@@ -1,20 +1,25 @@
-from robot.dh_model import DHModel, load_dh_from_yaml
-from robot.forward_kinematics import forward_kinematics
+from robot.forward_kinematics import ForwardKinematics
 import numpy as np
 
 def main():
-    # Load UR3 DH parameters
-    dh_params = load_dh_from_yaml("~/projects/ur3_robot_kinematics/config/robot_config.yaml")
-    print(dh_params)
-    # dh_model = DHModel(dh_params)
+    config_path = "~/ur3_robot_kinematics/config/robot_config.yaml"
+    fk_solver = ForwardKinematics(config_path)
 
-    # # Example joint angles in radians [θ1 to θ6]
-    # joint_angles = [0.0, -np.pi/2, 0.0, -np.pi/2, 0.0, 0.0]
+    # Example joint angles in radians (UR3 has 6 DOF)
+    joint_angles = [0, -np.pi/2, 0, -np.pi/2, 0, 0]
 
-    # # Compute forward kinematics
-    # ee_pose = forward_kinematics(joint_angles, dh_model)
+    transforms = fk_solver.compute(joint_angles)
 
-    # print("UR3 End-effector pose (4x4 homogeneous transform):\n", ee_pose)
+    end_effector_pose = transforms[5]
+
+    position = end_effector_pose[:3, 3]
+
+    print("End-effector postion (x, y, z):", np.round(position,3))
+
+    # for i, T in enumerate(transforms):
+    #     print(f"Transform to joint {i+1}:")
+    #     print(np.round(T, 3))
+    #     print()
 
 if __name__ == "__main__":
     main()

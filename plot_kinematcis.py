@@ -40,7 +40,7 @@ def plot_robot(dh_model, joint_angles):
     plt.show()
 
 if __name__ == "__main__":
-    dh_params = load_dh_from_yaml("~/projects/ur3_robot_kinematics/config/robot_config.yaml")
+    dh_params = load_dh_from_yaml("~/ur3_robot_kinematics/config/robot_config.yaml")
     model = DHModel(dh_params)
 
     # Example joint angles (radians)
