@@ -26,3 +26,4 @@ def compute_inverse_kinematics(config_path, target_pose):
         return  degrees_whole
     else:
         print("This Position is unreachable")
+        return None

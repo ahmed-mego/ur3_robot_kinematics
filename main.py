@@ -39,8 +39,8 @@ def main():
         print("FK after IK - Verified position (x, y, z):", np.round(verified_position, 3))
 
         # error check
-    error = np.linalg.norm(target_position[:3, 3] - verified_position)
-    print("Position error (meters):", np.round(error, 6))
+        error = np.linalg.norm(target_position[:3, 3] - verified_position)
+        print("Position error (meters):", np.round(error, 6))
 
     dh_params = load_dh_from_yaml(config_path)
     jacobian = compute_jacobian(dh_params, joint_angles)
