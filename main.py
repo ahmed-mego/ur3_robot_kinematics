@@ -154,6 +154,7 @@ joint_handles = [sim.getObject(name) for name in joint_names]
 
     
 if __name__ == "__main__":
+<<<<<<< HEAD
     main()
 =======
 # Move each joint to the target angle
@@ -169,3 +170,6 @@ sim.stopSimulation()
 print("Movement complete.")
 
 >>>>>>> e6d4b05eb29e9bed93863bd20ed87398f5a5eaa9
+=======
+    main()
+>>>>>>> 8facd499a9c0b1e6c50f9abbcb156c1b631e45ec
