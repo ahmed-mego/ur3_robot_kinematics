@@ -8,7 +8,6 @@ def compute_dh_matrix(theta, d, a, alpha):
         [0,              0,                           0,                           1]
     ])
 
-def compute_jacobian(dh_params, joint_angles):
     n = len(joint_angles)
     T = np.eye(4)
     origins = [T[:3, 3]]
