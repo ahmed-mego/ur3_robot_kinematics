@@ -2,6 +2,8 @@ from robot.forward_kinematics import ForwardKinematics
 from robot.dh_model import DHModel, load_dh_from_yaml
 import numpy as np
 from robot.inverse_kinematics import compute_inverse_kinematics
+from zmqRemoteApi import RemoteAPIClient
+from robot.inverse_kinematics import send_ur3_joints_to_coppelia
 
 
 def main():
@@ -28,7 +30,19 @@ def main():
     ])
     ik_degrees = compute_inverse_kinematics(config_path, target_position)
     print("IK solution :", ik_degrees)
+    if ik_degrees is not None:
+        # Convert degrees back to radians for FK verification
+        ik_radians = np.radians(ik_degrees)
+        fk_result = fk_solver.compute(ik_radians)
+        verified_pose = fk_result[5]  # End-effector pose after IK → FK
 
+        verified_position = verified_pose[:3, 3]
+        print("FK after IK - Verified position (x, y, z):", np.round(verified_position, 3))
+
+        # Optional: Check error
+    error = np.linalg.norm(target_position[:3, 3] - verified_position)
+    print("Position error (meters):", np.round(error, 6))
+    send_ur3_joints_to_coppelia(ik_radians)
 
     # for i, T in enumerate(transforms):
     #     print(f"Transform to joint {i+1}:")
