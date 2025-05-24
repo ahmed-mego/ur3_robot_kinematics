@@ -2,8 +2,7 @@ from robot.forward_kinematics import ForwardKinematics
 from robot.dh_model import DHModel, load_dh_from_yaml
 import numpy as np
 from robot.inverse_kinematics import compute_inverse_kinematics
-from zmqRemoteApi import RemoteAPIClient
-from robot.inverse_kinematics import send_ur3_joints_to_coppelia
+from robot.jacobian import compute_jacobian 
 
 
 def main():
@@ -12,7 +11,7 @@ def main():
 
     fk_solver = ForwardKinematics(config_path)
 
-    # Example joint angles in radians (UR3 has 6 DOF)
+    # Example joint angles in radians
     joint_angles = [0, -np.pi/2, 0, -np.pi/2, 0, 0]
 
     transforms = fk_solver.compute(joint_angles)
@@ -39,15 +38,14 @@ def main():
         verified_position = verified_pose[:3, 3]
         print("FK after IK - Verified position (x, y, z):", np.round(verified_position, 3))
 
-        # Optional: Check error
+        # error check
     error = np.linalg.norm(target_position[:3, 3] - verified_position)
     print("Position error (meters):", np.round(error, 6))
-    send_ur3_joints_to_coppelia(ik_radians)
 
-    # for i, T in enumerate(transforms):
-    #     print(f"Transform to joint {i+1}:")
-    #     print(np.round(T, 3))
-    #     print()
+    dh_params = load_dh_from_yaml(config_path)
+    jacobian = compute_jacobian(dh_params, joint_angles)
+    print("Jacobian matrix:\n", jacobian)
 
+    
 if __name__ == "__main__":
     main()
